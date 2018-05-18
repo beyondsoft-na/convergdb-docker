@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "127.0.0.1 $HOSTNAME" >> /etc/hosts
 cat /etc/hosts
 env
 
