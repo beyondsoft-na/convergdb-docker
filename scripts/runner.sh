@@ -1,6 +1,5 @@
 #!/bin/bash
 cat /etc/hosts
-export HOSTNAME=localhost
 env
 
 export SCRIPT_HOME=/tmp
