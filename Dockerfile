@@ -27,7 +27,7 @@ ENV PATH        $JAVA_HOME/bin:$SCALA_HOME/bin:$SBT_HOME/bin:$SPARK_HOME/bin:$SP
 # Download, uncompress and move all the required packages and libraries to their corresponding directories in /usr/local/ folder.
 RUN \
     apk --update add bash py-pip wget tar jq && \
-    pip install awscli && \
+    pip --upgrade install awscli && \
     rm -rf /tmp/* && \
     wget -qO - ${SCALA_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/ && \
     wget -qO - ${SBT_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/  && \
@@ -53,12 +53,9 @@ WORKDIR /root
 
 RUN pip install boto3
 
-
-
 ADD scripts/runner.sh /root/runner.sh
 RUN chmod +x /root/runner.sh
 ENTRYPOINT "/root/runner.sh"
 
-ADD jars/aws-java-sdk-1.7.4.jar /usr/local/spark/jars/aws-java-sdk-1.7.4.jar
+ADD jars/aws-java-sdk-1.11.340.jar /usr/local/spark/jars/aws-java-sdk-1.11.340.jar
 ADD jars/hadoop-aws-2.7.5.jar /usr/local/spark/jars/hadoop-aws-2.7.5.jar
-
