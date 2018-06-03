@@ -1,7 +1,5 @@
 FROM openjdk:8-jdk-alpine
 
-# originally created by Prashanth Babu <Prashanth.Babu@gmail.com>
-
 # Scala related variables.
 ARG SCALA_VERSION=2.12.2
 ARG SCALA_BINARY_ARCHIVE_NAME=scala-${SCALA_VERSION}
@@ -57,5 +55,5 @@ ADD scripts/runner.sh /root/runner.sh
 RUN chmod +x /root/runner.sh
 ENTRYPOINT "/root/runner.sh"
 
-ADD jars/aws-java-sdk-1.11.340.jar /usr/local/spark/jars/aws-java-sdk-1.11.340.jar
-ADD jars/hadoop-aws-3.0.2.jar /usr/local/spark/jars/hadoop-aws-3.0.2.jar
+ADD jars/aws-java-sdk-1.7.4.jar /usr/local/spark/jars/aws-java-sdk-1.7.4.jar
+ADD jars/hadoop-aws-2.7.3.jar /usr/local/spark/jars/hadoop-aws-2.7.3.jar
