@@ -58,4 +58,4 @@ RUN chmod +x /root/runner.sh
 ENTRYPOINT "/root/runner.sh"
 
 ADD jars/aws-java-sdk-1.11.340.jar /usr/local/spark/jars/aws-java-sdk-1.11.340.jar
-ADD jars/hadoop-aws-2.7.5.jar /usr/local/spark/jars/hadoop-aws-2.7.5.jar
+ADD jars/hadoop-aws-3.0.2.jar /usr/local/spark/jars/hadoop-aws-3.0.2.jar
