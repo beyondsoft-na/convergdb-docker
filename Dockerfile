@@ -24,7 +24,7 @@ ENV PATH        $JAVA_HOME/bin:$SCALA_HOME/bin:$SBT_HOME/bin:$SPARK_HOME/bin:$SP
 
 # Download, uncompress and move all the required packages and libraries to their corresponding directories in /usr/local/ folder.
 RUN \
-    apk --update add bash py-pip wget tar jq && \
+    apk --update add bash py-pip wget tar jq curl && \
     pip install awscli && \
     rm -rf /tmp/* && \
     wget -qO - ${SCALA_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/ && \
