@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk
 
 # Scala related variables.
 ARG SCALA_VERSION=2.12.2
@@ -23,9 +23,10 @@ ENV PATH        $JAVA_HOME/bin:$SCALA_HOME/bin:$SBT_HOME/bin:$SPARK_HOME/bin:$SP
 
 # Download, uncompress and move all the required packages and libraries to their corresponding directories in /usr/local/ folder.
 RUN \
-    apk --update add bash py-pip wget tar jq curl && \
+    apt-get update && apt-get install -y --no-install-recommends \
+      bash python-pip python-setuptools python-wheel wget tar jq curl && \
     pip install awscli && \
-    rm -f /tmp/* && \
+    rm -fr /tmp/* && \
     wget -qO - ${SCALA_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/ && \
     wget -qO - ${SBT_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/ && \
     wget -qO - ${SPARK_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/ && \
