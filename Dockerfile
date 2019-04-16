@@ -11,7 +11,7 @@ ARG SBT_BINARY_ARCHIVE_NAME=sbt-$SBT_VERSION
 ARG SBT_BINARY_DOWNLOAD_URL=https://dl.bintray.com/sbt/native-packages/sbt/${SBT_VERSION}/${SBT_BINARY_ARCHIVE_NAME}.tgz
 
 # Spark related variables.
-ARG SPARK_BINARY_ARCHIVE_NAME=spark-2.2.1-bin-hadoop2.8-convergdb
+ARG SPARK_BINARY_ARCHIVE_NAME=spark-2.4.1-bin-hadoop-3.1
 ARG SPARK_BINARY_DOWNLOAD_URL=http://dev.convergdb.com/downloads/spark/${SPARK_BINARY_ARCHIVE_NAME}.tgz
 
 # Configure env variables for Scala, SBT and Spark.
@@ -21,11 +21,13 @@ ENV SBT_HOME    /usr/local/sbt
 ENV SPARK_HOME  /usr/local/spark
 ENV PATH        $JAVA_HOME/bin:$SCALA_HOME/bin:$SBT_HOME/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin:$PATH
 
-# Download, uncompress and move all the required packages and libraries to their corresponding directories in /usr/local/ folder.
 RUN \
     apt-get update && apt-get install -y --no-install-recommends \
       bash python-pip python-setuptools python-wheel wget tar jq curl && \
-    pip install awscli && \
+    pip install awscli
+    
+# Download, uncompress and move all the required packages and libraries to their corresponding directories in /usr/local/ folder.
+RUN \
     rm -fr /tmp/* && \
     wget -qO - ${SCALA_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/ && \
     wget -qO - ${SBT_BINARY_DOWNLOAD_URL} | tar -xz -C /usr/local/ && \
@@ -35,24 +37,14 @@ RUN \
     ln -s ${SPARK_BINARY_ARCHIVE_NAME} spark && \
     cp spark/conf/log4j.properties.template spark/conf/log4j.properties && \
     sed -i -e s/WARN/ERROR/g spark/conf/log4j.properties && \
-    sed -i -e s/INFO/ERROR/g spark/conf/log4j.properties
+    sed -i -e s/INFO/ERROR/g spark/conf/log4j.properties 
 
-# We will be running our Spark jobs as `root` user.
 USER root
 
-# Working directory is set to the home folder of `root` user.
 WORKDIR /root
-
-# Expose ports for monitoring.
-# SparkContext web UI on 4040 -- only available for the duration of the application.
-# Spark master’s web UI on 8080.
-# Spark worker web UI on 8081.
-# EXPOSE 4040 8080 8081
 
 RUN pip install boto3
 
 ADD scripts/runner.sh /root/runner.sh
 RUN chmod +x /root/runner.sh
 ENTRYPOINT "/root/runner.sh"
-
-ADD jars/*.jar /usr/local/spark/jars/
